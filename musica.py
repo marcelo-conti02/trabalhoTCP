@@ -51,16 +51,18 @@ class Musica:
                     break
 
                 self.pause_event.wait()
+                duracao = 60 / nota.bpm
 
                 if nota.nota != ' ':
                     midi_note = self._converter_nota_para_midi(nota.nota) + (12 * nota.oitava)
                     velocity = int(127 * min(self.volume, nota.volume))
                     self.player.set_instrument(nota.instrumento)
                     self.player.note_on(midi_note, velocity)
-                    time.sleep(0.5)
+                    time.sleep(duracao)
                     self.player.note_off(midi_note, velocity)
                 else:
-                    time.sleep(0.5)
+                    time.sleep(duracao)
+
         except Exception as e:
             print(f"Erro ao reproduzir: {e}")
         finally:
@@ -69,7 +71,7 @@ class Musica:
     def _converter_nota_para_midi(self, nota):
         mapa_notas = {
             'A': 69, 'B': 71, 'C': 60, 'D': 62,
-            'E': 64, 'F': 65, 'G': 67, 'H': 72
+            'E': 64, 'F': 65, 'G': 67, 'H': 72,
         }
         return mapa_notas.get(nota.upper(), 60)
 

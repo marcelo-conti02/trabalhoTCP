@@ -4,7 +4,8 @@ import time
 
 
 class NotaMusica:
-    def __init__(self, nota, instrumento=0, volume=0.5, oitava=4, bpm = 80):
+    
+    def __init__(self, nota, instrumento=0, volume=0.5, oitava=0, bpm = 80):
         self.nota = nota
         self.instrumento = instrumento
         self.volume = volume
