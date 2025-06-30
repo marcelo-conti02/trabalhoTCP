@@ -1,4 +1,5 @@
 from nota_musica import NotaMusica
+import random
 
 DEFAULT_OITAVA = 0 
 DEFAULT_VOLUME = 25
@@ -7,8 +8,8 @@ MIN_BPM = 60
 MAX_BPM = 600
 MIN_OITAVA = 0
 MAX_OITAVA = 9
-MIN_VOLUME = 0
-MAX_VOLUME = 100
+MIN_VOLUME = 0.5
+MAX_VOLUME = 1
 
 class Conversor:
     def __init__(self, texto):
@@ -106,11 +107,15 @@ class Conversor:
                 continue                
             
             else:
+                if not notas:
+                    i +=1
+                    continue                    
                 notas.append(notas[-1])
                 i +=1
                 continue
 
-        print(f"Música gerada com {len(notas)} notas.")
+        print(f"Musica gerada com {len(notas)} notas.")
         for nota in notas:
-            print(nota.nota, nota.instrumento, nota.volume, nota.oitava,nota.bpm)
+            print(nota.nota,nota.volume)
+
         return notas

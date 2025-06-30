@@ -177,6 +177,7 @@ class Interface:
         self.musica = None
 
     def carregar_arquivo(self):
+        
         caminho_arquivo = filedialog.askopenfilename(
             title="Escolher Arquivo de Texto",
             filetypes=(("Text Files", "*.txt"), ("All Files", "*.*"))
@@ -191,6 +192,7 @@ class Interface:
                 messagebox.showerror("Erro", "Arquivo inválido. Tente novamente.")
         else:
             messagebox.showinfo("Informação", "Nenhum arquivo foi selecionado.")
+
 
     def carregar_texto_digitado(self):
         texto_digitado = self.texto_entry.get(1.0, tk.END).strip()
@@ -210,9 +212,10 @@ class Interface:
             
             notas = conversor.converte_texto_em_musica()
             self.musica = Musica(notas)
-            self.estado_musica.config(text="Estado da Música: Preparando para tocar")
+            self.estado_musica.config(text="Estado da Música: Pronto para tocar")
         else:
             messagebox.showerror("Erro", "O campo de texto está vazio. Digite algo antes de reproduzir.")
+
 
     def reproduzir_musica(self):
         if not self.musica:
@@ -224,6 +227,7 @@ class Interface:
         else:
             messagebox.showerror("Erro", "Nenhuma música carregada. Digite um texto ou carregue um arquivo primeiro.")
 
+
     def pausar_musica(self):
         if self.musica:
             self.musica.pausar()
@@ -231,13 +235,15 @@ class Interface:
         else:
             messagebox.showerror("Erro", "Nenhuma música carregada para pausar.")
 
+
     def resetar_musica(self):
         if self.musica:
             self.musica.resetar()
             self.estado_musica.config(text="Estado da Música: Reiniciada")
         else:
             messagebox.showerror("Erro", "Nenhuma música carregada para reiniciar.")
-            
+
+
     def alterar_volume(self, valor):
         if hasattr(self, 'musica') and self.musica:
             volume_normalizado = int(valor) / 100
@@ -248,8 +254,7 @@ class Interface:
         else:
             self.estado_musica.config(text=f"Volume: {valor}% (aguardando música)")
 
-
-
+    
     def alterar_oitava(self, valor):
         if hasattr(self, 'musica') and self.musica:
             for nota in self.musica.notas:
@@ -257,6 +262,7 @@ class Interface:
             self.estado_musica.config(text=f"Oitava: {valor}")
             if self.musica.is_playing:
                 self.resetar_musica()
+
 
     def alterar_instrumento(self, event=None):
         if hasattr(self, 'musica') and self.musica:

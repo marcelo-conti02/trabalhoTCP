@@ -5,7 +5,7 @@ import threading
 class Musica:
     def __init__(self, notas):
         self.notas = notas
-        self.volume = 0.5  # Volume padrão (0.0 a 1.0)
+        self.volume = 1  # Volume padrão (0.0 a 1.0)
         self._inicializar_midi()
 
         self.is_playing = False
@@ -68,12 +68,14 @@ class Musica:
         finally:
             self.is_playing = False
 
+
     def _converter_nota_para_midi(self, nota):
         mapa_notas = {
             'A': 69, 'B': 71, 'C': 60, 'D': 62,
             'E': 64, 'F': 65, 'G': 67, 'H': 72,
         }
         return mapa_notas.get(nota.upper(), 60)
+
 
     def pausar(self):
         if self.is_playing and self.pause_event.is_set():
