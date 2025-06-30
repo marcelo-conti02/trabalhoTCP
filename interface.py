@@ -3,6 +3,7 @@ from tkinter import ttk, filedialog, messagebox
 from documento import Documento
 from musica import Musica
 from conversor import Conversor
+import pygame.mixer
 
 DEFAULT_VOLUME = 50  
 DEFAULT_OITAVA = 4 
@@ -133,7 +134,9 @@ class Interface:
         self.volume_scale.set(DEFAULT_VOLUME)
         self.volume_scale.grid(row=0, column=1, padx=5)
 
-        # Oitava
+
+
+        #Oitava
         self.oitava_label = tk.Label(
             self.controles_avancados_frame, 
             text="Oitava:", 
@@ -207,7 +210,7 @@ class Interface:
             
             # Aplica as configurações atuais
             conversor.volume = self.volume_scale.get() / 100
-            conversor.oitava = self.oitava_scale.get()
+            #conversor.oitava = self.oitava_scale.get()
             conversor.instrumento = int(self.instrumento_var.get().split("(")[-1].rstrip(")"))
             
             notas = conversor.converte_texto_em_musica()
@@ -245,14 +248,13 @@ class Interface:
 
 
     def alterar_volume(self, valor):
-        if hasattr(self, 'musica') and self.musica:
+        if self.musica:
             volume_normalizado = int(valor) / 100
             self.musica.set_volume(volume_normalizado)
-            for nota in self.musica.notas:
-                nota.volume = volume_normalizado
             self.estado_musica.config(text=f"Volume: {valor}%")
         else:
             self.estado_musica.config(text=f"Volume: {valor}% (aguardando música)")
+
 
     
     def alterar_oitava(self, valor):
@@ -276,3 +278,21 @@ class Interface:
                     self.musica.player.set_instrument(novo_instrumento)
             except Exception as e:
                 print(f"Erro ao alterar instrumento: {e}")
+
+    def alternar_reproducao(self):
+        if not self.musica:
+            self.carregar_texto_digitado()
+
+        if not self.musica:
+            return  # erro já tratado na outra função
+
+        if not self.musica.is_playing:
+            # Tocar
+            self.musica.reproduzir()
+            self.reproduzir_button.config(text="⏸ Pausar")
+            self.estado_musica.config(text="Estado da Música: Tocando")
+        else:
+            # Pausar
+            self.musica.pausar()
+            self.reproduzir_button.config(text="▶ Reproduzir")
+            self.estado_musica.config(text="Estado da Música: Pausada")

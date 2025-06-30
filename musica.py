@@ -5,9 +5,8 @@ import threading
 class Musica:
     def __init__(self, notas):
         self.notas = notas
-        self.volume = 1  # Volume padrão (0.0 a 1.0)
+        self.volume_global = 1  # Volume padrão (0.0 a 1.0)
         self._inicializar_midi()
-
         self.is_playing = False
         self.is_paused = False
         self.playback_thread = None
@@ -28,7 +27,7 @@ class Musica:
 
     def set_volume(self, volume):
         """Define o volume global (0.0 a 1.0)"""
-        self.volume = max(0.0, min(1.0, volume))
+        self.volume_global = max(0.0, min(1.0, volume))
 
     def reproduzir(self):
         if self.is_playing:
@@ -45,28 +44,27 @@ class Musica:
         self.playback_thread.start()
 
     def _playback(self):
-        try:
-            for nota in self.notas:
-                if not self.is_playing:
-                    break
+            self.is_playing = True
+            try:
+                for nota in self.notas:
+                    if not self.is_playing:
+                        break
+                    self.pause_event.wait()
 
-                self.pause_event.wait()
-                duracao = 60 / nota.bpm
+                    if nota.nota != ' ':
+                        midi_note = self._converter_nota_para_midi(nota.nota) + (12 * nota.oitava)
+                        velocity = int(127 * min(nota.volume * self.volume_global, 1.0))
 
-                if nota.nota != ' ':
-                    midi_note = self._converter_nota_para_midi(nota.nota) + (12 * nota.oitava)
-                    velocity = int(127 * min(self.volume, nota.volume))
-                    self.player.set_instrument(nota.instrumento)
-                    self.player.note_on(midi_note, velocity)
-                    time.sleep(duracao)
-                    self.player.note_off(midi_note, velocity)
-                else:
-                    time.sleep(duracao)
+                        self.player.set_instrument(nota.instrumento)
+                        self.player.note_on(midi_note, velocity)
 
-        except Exception as e:
-            print(f"Erro ao reproduzir: {e}")
-        finally:
-            self.is_playing = False
+                        time.sleep(60 / nota.bpm)
+
+                        self.player.note_off(midi_note, velocity)
+                    else:
+                        time.sleep(60 / nota.bpm)
+            finally:
+                self.is_playing = False
 
 
     def _converter_nota_para_midi(self, nota):
@@ -100,3 +98,4 @@ class Musica:
             self.player = None
         if pygame.midi.get_init():
             pygame.midi.quit()
+    

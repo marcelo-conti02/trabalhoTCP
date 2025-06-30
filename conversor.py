@@ -2,13 +2,13 @@ from nota_musica import NotaMusica
 import random
 
 DEFAULT_OITAVA = 0 
-DEFAULT_VOLUME = 25
+DEFAULT_VOLUME = 0.5
 DEFAULT_BPM = 80
 MIN_BPM = 60
 MAX_BPM = 600
 MIN_OITAVA = 0
 MAX_OITAVA = 9
-MIN_VOLUME = 0.5
+MIN_VOLUME = 0.0
 MAX_VOLUME = 1
 
 class Conversor:
