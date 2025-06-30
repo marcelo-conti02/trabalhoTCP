@@ -14,7 +14,6 @@ class Interface:
     def __init__(self, root):
         self.root = root
         self.root.title("Gerador de Música a partir de Texto")
-        
         # Configuração da janela principal
         self.root.geometry("800x600")
         self.root.configure(bg="#f0f0f0")
@@ -88,20 +87,20 @@ class Interface:
         self.reproduzir_button = tk.Button(
             self.controles_frame, 
             text="▶ Reproduzir", 
-            command=self.reproduzir_musica, 
+            command=self.alternar_reproducao, 
             width=10, 
             **button_style
         )
         self.reproduzir_button.grid(row=0, column=0, padx=10)
 
-        self.pausar_button = tk.Button(
-            self.controles_frame, 
-            text="⏸ Pausar", 
-            command=self.pausar_musica, 
-            width=10, 
-            **button_style
-        )
-        self.pausar_button.grid(row=0, column=1, padx=10)
+        #self.pausar_button = tk.Button(
+        #    self.controles_frame, 
+        #    text="⏸ Pausar", 
+        #   command=self.pausar_musica, 
+        #    width=10, 
+        #    **button_style
+        #)
+        #self.pausar_button.grid(row=0, column=1, padx=10)
 
         self.resetar_button = tk.Button(
             self.controles_frame, 
@@ -238,14 +237,33 @@ class Interface:
         else:
             messagebox.showerror("Erro", "Nenhuma música carregada para pausar.")
 
+    def alternar_reproducao(self):
+
+        if not self.musica.is_playing:
+            # Reproduzir
+            self.reproduzir_musica()
+            self.reproduzir_button.config(text="⏸ Pausar")
+            self.estado_musica.config(text="Estado da Música: Tocando")
+        else:
+            if self.musica.is_paused:
+                self.reproduzir_musica()
+                self.reproduzir_button.config(text="⏸ Pausar")
+                self.estado_musica.config(text="Estado da Música: Tocando")
+            else:                
+                # Pausar
+                self.pausar_musica()
+                self.reproduzir_button.config(text="▶ Reproduzir")
+                self.estado_musica.config(text="Estado da Música: Pausada")
+
 
     def resetar_musica(self):
         if self.musica:
             self.musica.resetar()
             self.estado_musica.config(text="Estado da Música: Reiniciada")
+            self.reproduzir_button.config(text="⏸ Pausar")
         else:
             messagebox.showerror("Erro", "Nenhuma música carregada para reiniciar.")
-
+        
 
     def alterar_volume(self, valor):
         if self.musica:
@@ -279,20 +297,6 @@ class Interface:
             except Exception as e:
                 print(f"Erro ao alterar instrumento: {e}")
 
-    def alternar_reproducao(self):
-        if not self.musica:
-            self.carregar_texto_digitado()
-
-        if not self.musica:
-            return  # erro já tratado na outra função
-
-        if not self.musica.is_playing:
-            # Tocar
-            self.musica.reproduzir()
-            self.reproduzir_button.config(text="⏸ Pausar")
-            self.estado_musica.config(text="Estado da Música: Tocando")
-        else:
-            # Pausar
-            self.musica.pausar()
-            self.reproduzir_button.config(text="▶ Reproduzir")
-            self.estado_musica.config(text="Estado da Música: Pausada")
+       
+    def baixar_musica(self):
+        pass

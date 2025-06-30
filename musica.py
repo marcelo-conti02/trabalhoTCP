@@ -29,19 +29,6 @@ class Musica:
         """Define o volume global (0.0 a 1.0)"""
         self.volume_global = max(0.0, min(1.0, volume))
 
-    def reproduzir(self):
-        if self.is_playing:
-            if not self.pause_event.is_set():
-                self.pause_event.set()
-                return
-            else:
-                return
-
-        self._reinicializar_midi()
-        self.is_playing = True
-        self.pause_event.set()
-        self.playback_thread = threading.Thread(target=self._playback)
-        self.playback_thread.start()
 
     def _playback(self):
             self.is_playing = True
@@ -74,16 +61,34 @@ class Musica:
         }
         return mapa_notas.get(nota.upper(), 60)
 
+    def reproduzir(self):
+        if self.is_playing:
+            if not self.pause_event.is_set():
+                self.pause_event.set()
+                self.is_paused=False
+                return
+            else:
+                return
+        else:
+            self._reinicializar_midi()
+            self.is_playing = True
+            self.pause_event.set()
+            self.playback_thread = threading.Thread(target=self._playback)
+            self.playback_thread.start()
+            self.is_paused=False
 
     def pausar(self):
         if self.is_playing and self.pause_event.is_set():
             self.pause_event.clear()
+            self.is_paused = True
 
     def resetar(self):
         self.pause_event.set()
         self.parar()
-        time.sleep(0.1)
+        self.is_paused= False
+        #time.sleep(0.1)
         self.reproduzir()
+        
 
     def parar(self):
         self.is_playing = False
