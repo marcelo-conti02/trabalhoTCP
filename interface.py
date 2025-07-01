@@ -214,6 +214,7 @@ class Interface:
             
             notas = conversor.converte_texto_em_musica()
             self.musica = Musica(notas)
+            self.musica.on_finish = self.ao_terminar_musica
             self.estado_musica.config(text="Estado da Música: Pronto para tocar")
             self.reproduzir_button.config(text="▶ Reproduzir")
         else:
@@ -255,6 +256,7 @@ class Interface:
                 self.pausar_musica()
                 self.reproduzir_button.config(text="▶ Reproduzir")
                 self.estado_musica.config(text="Estado da Música: Pausada")
+        
 
 
     def resetar_musica(self):
@@ -297,6 +299,15 @@ class Interface:
                     self.musica.player.set_instrument(novo_instrumento)
             except Exception as e:
                 print(f"Erro ao alterar instrumento: {e}")
+
+    def _atualizar_interface_fim_musica(self):
+        self.estado_musica.config(text="Estado da Música: Finalizada")
+        self.reproduzir_button.config(text="▶ Reproduzir")
+
+    
+    def ao_terminar_musica(self):
+        self.root.after(0, self._atualizar_interface_fim_musica)
+
 
        
 

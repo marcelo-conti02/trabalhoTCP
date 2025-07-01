@@ -12,6 +12,7 @@ class Musica:
         self.playback_thread = None
         self.pause_event = threading.Event()
         self.pause_event.set()
+        self.on_finish = None
 
     def _inicializar_midi(self):
         if not pygame.midi.get_init():
@@ -51,7 +52,8 @@ class Musica:
                         time.sleep(60 / nota.bpm)
             finally:
                 self.is_playing = False
-
+                if callable(self.on_finish):
+                    self.on_finish()
 
     def _converter_nota_para_midi(self, nota):
         mapa_notas = {
@@ -90,9 +92,14 @@ class Musica:
 
     def parar(self):
         self.is_playing = False
+        self.pause_event.set()  # Garante que o thread não fique preso em wait()
+
         if self.playback_thread and self.playback_thread.is_alive():
             if threading.current_thread() != self.playback_thread:
-                self.playback_thread.join()
+                try:
+                    self.playback_thread.join(timeout=2)
+                except Exception as e:
+                    print(f"Erro ao finalizar thread de reprodução: {e}")
 
     def fechar(self):
         self.parar()
