@@ -26,7 +26,6 @@ class Musica:
         self._inicializar_midi()
 
     def set_volume(self, volume):
-        """Define o volume global (0.0 a 1.0)"""
         self.volume_global = max(0.0, min(1.0, volume))
 
 
@@ -86,7 +85,6 @@ class Musica:
         self.pause_event.set()
         self.parar()
         self.is_paused= False
-        #time.sleep(0.1)
         self.reproduzir()
         
 

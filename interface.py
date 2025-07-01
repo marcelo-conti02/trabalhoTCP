@@ -215,6 +215,7 @@ class Interface:
             notas = conversor.converte_texto_em_musica()
             self.musica = Musica(notas)
             self.estado_musica.config(text="Estado da Música: Pronto para tocar")
+            self.reproduzir_button.config(text="▶ Reproduzir")
         else:
             messagebox.showerror("Erro", "O campo de texto está vazio. Digite algo antes de reproduzir.")
 
@@ -298,5 +299,4 @@ class Interface:
                 print(f"Erro ao alterar instrumento: {e}")
 
        
-    def baixar_musica(self):
-        pass
+
