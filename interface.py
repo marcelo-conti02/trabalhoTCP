@@ -136,22 +136,22 @@ class Interface:
 
 
         #Oitava
-        self.oitava_label = tk.Label(
-            self.controles_avancados_frame, 
-            text="Oitava:", 
-            bg="#f0f0f0"
-        )
-        self.oitava_label.grid(row=0, column=2, padx=5)
+        #self.oitava_label = tk.Label(
+        #    self.controles_avancados_frame, 
+        #    text="Oitava:", 
+        #    bg="#f0f0f0"
+        #)
+        #self.oitava_label.grid(row=0, column=2, padx=5)
         
-        self.oitava_scale = tk.Scale(
-            self.controles_avancados_frame, 
-            from_=MIN_OITAVA, 
-            to=MAX_OITAVA, 
-            orient="horizontal",
-            command=self.alterar_oitava
-        )
-        self.oitava_scale.set(DEFAULT_OITAVA)
-        self.oitava_scale.grid(row=0, column=3, padx=5)
+        #self.oitava_scale = tk.Scale(
+        #    self.controles_avancados_frame, 
+        #    from_=MIN_OITAVA, 
+        #    to=MAX_OITAVA, 
+        #    orient="horizontal",
+        #    command=self.alterar_oitava
+        #)
+        #self.oitava_scale.set(DEFAULT_OITAVA)
+        #self.oitava_scale.grid(row=0, column=3, padx=5)
 
         # Instrumento
         self.instrumento_label = tk.Label(

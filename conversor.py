@@ -115,7 +115,6 @@ class Conversor:
                 continue
 
         print(f"Musica gerada com {len(notas)} notas.")
-        for nota in notas:
-            print(nota.nota,nota.volume)
+
 
         return notas
